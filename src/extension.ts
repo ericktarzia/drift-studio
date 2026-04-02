@@ -65,7 +65,6 @@ export function activate(context: vscode.ExtensionContext) {
   );
   context.subscriptions.push(openTableWebviewCommand);
 
-  // Função utilitária para gerar HTML do CRUD de colunas
   function getTableWebviewHtml(
     tableName: string,
     columns: { name: string; type: string }[],
