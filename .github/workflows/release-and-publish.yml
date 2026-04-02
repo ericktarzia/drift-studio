@@ -19,8 +19,7 @@ jobs:
         run: |
           npx release-please manifest-release \
             --token=${{ secrets.GITHUB_TOKEN }} \
-            --repo-url=${{ github.repository }} \
-            --bump-minor-pre-major
+            --repo-url=${{ github.repository }}
       - name: Debug Release Outputs
         run: |
           echo "Release created: ${{ steps.release.outputs.release_created }}"
