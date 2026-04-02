@@ -1,3 +1,7 @@
+# Autor
+
+Erick Tarzia <ericktarzia@gmail.com>
+
 # Drift Studio for VS Code
 
 🚀 **Explore Drift tables and columns in your Dart/Flutter project, instantly!**
