@@ -16,14 +16,12 @@ jobs:
         with:
           node-version: 20
       - name: Release Please
-        uses: google-github-actions/release-please-action@v4
-        id: release
-        with:
-          release-type: node
-          package-name: drift-studio
-          token: ${{ secrets.GITHUB_TOKEN }}
-          bump-minor-pre-major: true
-          create-release: true
+        run: |
+          npx release-please release-pr \
+            --token=${{ secrets.GITHUB_TOKEN }} \
+            --repo-url=${{ github.repository }} \
+            --bump-minor-pre-major \
+            --create-release
       - name: Debug Release Outputs
         run: |
           echo "Release created: ${{ steps.release.outputs.release_created }}"
