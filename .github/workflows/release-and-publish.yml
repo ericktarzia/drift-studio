@@ -19,7 +19,8 @@ jobs:
         run: |
           npx release-please manifest-release \
             --token=${{ secrets.GITHUB_TOKEN }} \
-            --repo-url=${{ github.repository }}
+            --repo-url=${{ github.repository }} \
+            --release-as $(jq -r '.version' < package.json)
       - name: Debug Release Outputs
         run: |
           echo "Release created: ${{ steps.release.outputs.release_created }}"
