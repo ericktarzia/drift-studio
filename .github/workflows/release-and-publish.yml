@@ -20,11 +20,10 @@ jobs:
           npx release-please manifest-release \
             --token=${{ secrets.GITHUB_TOKEN }} \
             --repo-url=${{ github.repository }} \
-            --release-as $(jq -r '.version' < package.json)
+            --manifest-file=.release-please-manifest.json
       - name: Debug Release Outputs
         run: |
-          echo "Release created: ${{ steps.release.outputs.release_created }}"
-          echo "Tag name: ${{ steps.release.outputs.tag_name }}"
+          echo "Release process completed. Check the repository for updates."
 
   publish:
     needs: release-please
