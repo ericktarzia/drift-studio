@@ -38,16 +38,19 @@ export class DriftTreeProvider implements vscode.TreeDataProvider<any> {
         {
           label: "tables",
           collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
-          children: this._tables.map((table) => ({
-            label: table,
-            collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-            contextValue: "driftTableNode",
-            command: {
-              command: "drift-studio.openTableWebview",
-              title: "Abrir tabela",
-              arguments: [{ tableName: table }],
-            },
-          })),
+          children: this._tables
+            .slice()
+            .sort((a, b) => a.localeCompare(b))
+            .map((table) => ({
+              label: table,
+              collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+              contextValue: "driftTableNode",
+              command: {
+                command: "drift-studio.openTableWebview",
+                title: "Abrir tabela",
+                arguments: [{ tableName: table }],
+              },
+            })),
           contextValue: "tablesRootNode",
         },
       ];
@@ -58,7 +61,9 @@ export class DriftTreeProvider implements vscode.TreeDataProvider<any> {
       this._tables.includes(element.label)
     ) {
       if (this._columnsCache[element.label]) {
-        const cols = this._columnsCache[element.label] || [];
+        const cols = (this._columnsCache[element.label] || [])
+          .slice()
+          .sort((a, b) => a.name.localeCompare(b.name));
         if (cols.length === 0) {
           return [
             {

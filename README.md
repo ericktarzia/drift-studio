@@ -1,71 +1,71 @@
-# drift-studio README
+# Drift Studio for VS Code
 
-This is the README for your extension "drift-studio". After writing up a brief description, we recommend including the following sections.
+🚀 **Explore Drift tables and columns in your Dart/Flutter project, instantly!**
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Detects and lists all Drift tables and columns in your project.
+- Shows column types and organizes everything alphabetically.
+- Click a column name to open the table class in your code.
+- Modern, clean, and fast UI.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+> New features coming soon! Stay tuned for live data editing and more.
 
 ---
 
-## Following extension guidelines
+![alt text](image.png)
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+---
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+## How to Use
 
-## Working with Markdown
+1. Open your Dart/Flutter project in VS Code.
+2. Click the Drift Studio icon in the Explorer.
+3. Browse your tables and columns. Click a column to jump to its class.
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+---
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+## Changelog
 
-## For more information
+- 0.1.0: Initial release – Drift table/column explorer, quick navigation.
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+---
 
-**Enjoy!**
+## Feedback
+
+Found a bug or want a feature? [Open an issue](https://github.com/your-repo/drift-studio) or leave a review!
+
+---
+
+# Drift Studio para VS Code
+
+🚀 **Explore tabelas e colunas Drift no seu projeto Dart/Flutter, instantaneamente!**
+
+## Funcionalidades
+
+- Detecta e lista todas as tabelas e colunas Drift do seu projeto.
+- Mostra os tipos das colunas e organiza tudo em ordem alfabética.
+- Clique no nome de uma coluna para abrir a classe da tabela no código.
+- Interface moderna, limpa e rápida.
+
+> Novas funcionalidades em breve! Fique ligado para edição de dados ao vivo e mais.
+
+---
+
+## Como Usar
+
+1. Abra seu projeto Dart/Flutter no VS Code.
+2. Clique no ícone do Drift Studio no Explorer.
+3. Navegue pelas tabelas e colunas. Clique em uma coluna para ir direto para a classe.
+
+---
+
+## Changelog
+
+- 0.1.0: Primeira versão – Explorer de tabelas/colunas Drift, navegação rápida.
+
+---
+
+## Feedback
+
+Achou um bug ou quer sugerir uma feature? [Abra uma issue](https://github.com/your-repo/drift-studio) ou deixe sua avaliação!
