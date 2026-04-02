@@ -21,8 +21,6 @@ jobs:
       - name: Release Please
         id: release
         uses: googleapis/release-please-action@v4
-        with:
-          config-file: .github/release-please-config.json
 
   publish:
     needs: release-please
