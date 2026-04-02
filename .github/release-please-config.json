@@ -1,0 +1,21 @@
+{
+  "release-type": "node",
+  "changelog-sections": {
+    "feature": "Adicionado",
+    "enhancement": "Adicionado",
+    "bug": "Corrigido",
+    "fix": "Corrigido",
+    "chore": "Alterado",
+    "docs": "Documentação",
+    "refactor": "Refatoração",
+    "breaking": "Mudanças incompatíveis"
+  },
+  "changelog-path": "CHANGELOG.md",
+  "include-v-in-tag": true,
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true,
+  "handle-missing-label": {
+    "section": "Other",
+    "bump": "patch"
+  }
+}
