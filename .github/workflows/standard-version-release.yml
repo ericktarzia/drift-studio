@@ -1,0 +1,53 @@
+name: Release and Deploy
+
+on:
+    push:
+        branches:
+            - master
+    workflow_dispatch: {}
+
+permissions:
+    contents: write
+    packages: write
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Release with Release Please
+              uses: google-github-actions/release-please-action@v3
+              with:
+                  release-type: node
+                  changelog-types: |
+                      feature: Adicionado
+                      enhancement: Adicionado
+                      bug: Corrigido
+                      fix: Corrigido
+                      chore: Alterado
+                      docs: Documentação
+                      refactor: Refatoração
+                      breaking: Mudanças incompatíveis
+                  package-name: drift-studio
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Build extension
+              run: npm run package
+
+            - name: Publish to VS Code Marketplace
+              if: ${{ secrets.VSCE_PAT }}
+              env:
+                  VSCE_PAT: ${{ secrets.VSCE_PAT }}
+              run: npx vsce publish -p $VSCE_PAT
