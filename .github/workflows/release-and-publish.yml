@@ -1,50 +1,85 @@
 name: Release and Publish
 
 on:
-  push:
-    branches:
-      - master
+    push:
+        branches:
+            - master
 
 jobs:
-  release-please:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Release Please
-        run: |
-          npx release-please manifest-release \
-            --token=${{ secrets.GITHUB_TOKEN }} \
-            --repo-url=${{ github.repository }} \
-            --manifest-file=.release-please-manifest.json
-      - name: Debug Release Outputs
-        run: |
-          echo "Release process completed. Check the repository for updates."
+    release-please:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  persist-credentials: true
 
-  publish:
-    needs: release-please
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install dependencies
-        run: npm install
-      - name: Build extension
-        run: npm run package
-      - name: Publish to VS Code Marketplace
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
-        run: |
-          if [ -z "$VSCE_PAT" ]; then
-            echo "VSCE_PAT is not set. Skipping publish step."
-            exit 1
-          fi
-          npx vsce publish -p $VSCE_PAT
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+
+            - name: Release Please
+              run: |
+                  npx release-please manifest-release \
+                    --token=${{ secrets.GITHUB_TOKEN }} \
+                    --repo-url=${{ github.repository }} \
+                    --manifest-file=.release-please-manifest.json
+
+            - name: Get version
+              run: |
+                  VERSION=$(jq -r '."packages/drift-studio"' < .release-please-manifest.json)
+                  echo "VERSION=$VERSION" >> $GITHUB_ENV
+                  echo "Found version: $VERSION"
+
+            - name: Create tag
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git tag -a "v${{ env.VERSION }}" -m "chore(release): v${{ env.VERSION }}"
+                  git push origin "v${{ env.VERSION }}"
+              env:
+                  VERSION: ${{ env.VERSION }}
+
+            - name: Create GitHub Release
+              uses: actions/create-release@v1
+              with:
+                  tag_name: v${{ env.VERSION }}
+                  release_name: v${{ env.VERSION }}
+                  body: "Release v${{ env.VERSION }}"
+                  draft: false
+                  prerelease: false
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  VERSION: ${{ env.VERSION }}
+
+    publish:
+        needs: release-please
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Build extension
+              run: npm run package
+
+            - name: Publish to VS Code Marketplace
+              env:
+                  VSCE_PAT: ${{ secrets.VSCE_PAT }}
+              run: |
+                  if [ -z "$VSCE_PAT" ]; then
+                    echo "VSCE_PAT is not set. Skipping publish step."
+                    exit 1
+                  fi
+                  npx vsce publish -p "$VSCE_PAT"
