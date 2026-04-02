@@ -23,6 +23,7 @@ jobs:
         uses: googleapis/release-please-action@v4
         with:
           config-file: .github/release-please-config.json
+          manifest-file: false
 
   publish:
     needs: release-please
