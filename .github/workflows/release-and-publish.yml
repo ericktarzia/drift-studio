@@ -55,5 +55,4 @@ jobs:
             echo "VSCE_PAT is not set. Skipping publish step."
             exit 1
           fi
-          echo "Publishing to VS Code Marketplace..."
           npx vsce publish -p $VSCE_PAT
