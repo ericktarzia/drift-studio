@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/ericktarzia/drift-studio/compare/v0.0.6...v0.0.7) (2026-04-03)
+
+
+### Features
+
+* add persist-credentials option and sync workspace in publish job ([ded2710](https://github.com/ericktarzia/drift-studio/commit/ded271017abfee95136d9dd1219b98c9e2054535))
+
 ### [0.0.6](https://github.com/ericktarzia/drift-studio/compare/v0.0.5...v0.0.6) (2026-04-03)
 
 
