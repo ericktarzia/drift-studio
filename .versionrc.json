@@ -1,0 +1,3 @@
+{
+  "releaseRules": [{ "type": "feature", "release": "minor" }]
+}

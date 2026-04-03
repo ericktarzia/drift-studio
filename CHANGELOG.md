@@ -4,10 +4,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [0.0.9](https://github.com/ericktarzia/drift-studio/compare/v0.0.8...v0.0.9) (2026-04-03)
 
-
 ### Features
 
-* add Unreleased changelog entry for bump test ([eccbe79](https://github.com/ericktarzia/drift-studio/commit/eccbe7926c21d2c0ac6a412d63bd2781813c3fbc))
+- add Unreleased changelog entry for bump test ([eccbe79](https://github.com/ericktarzia/drift-studio/commit/eccbe7926c21d2c0ac6a412d63bd2781813c3fbc))
 
 ### [0.0.8](https://github.com/ericktarzia/drift-studio/compare/v0.0.7...v0.0.8) (2026-04-03)
 

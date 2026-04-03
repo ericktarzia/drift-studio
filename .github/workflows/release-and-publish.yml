@@ -9,58 +9,65 @@ jobs:
     release:
         if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
         runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-                  persist-credentials: true
+        concurrency:
+            group: release-${{ github.ref }}
+            cancel-in-progress: true
+            steps:
+                - name: Checkout
+                  uses: actions/checkout@v4
+                  with:
+                      fetch-depth: 0
+                      persist-credentials: true
 
-            - name: Sync workspace to latest master
-              run: |
-                  git fetch origin master --tags
-                  git checkout master
-                  git reset --hard origin/master
+                - name: Sync workspace to latest master
+                  run: |
+                      git fetch origin master --tags
+                      git checkout master
+                      git reset --hard origin/master
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20
+                - name: Setup Node.js
+                  uses: actions/setup-node@v4
+                  with:
+                      node-version: 20
 
-            - name: Configure Git identity
-              run: |
-                  git config user.name "github-actions[bot]"
-                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                - name: Configure Git identity
+                  run: |
+                      git config user.name "github-actions[bot]"
+                      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-            - name: Install dependencies
-              run: npm ci
+                - name: Install dependencies
+                  run: npm ci
 
-            - name: Bump version and generate changelog (standard-version)
-              run: |
-                  npx standard-version --no-verify
+                - name: Dry-run standard-version (preview)
+                  run: |
+                      npx standard-version --dry-run
 
-            - name: Push version commit and tags
-              run: |
-                  git push origin HEAD:master --follow-tags
+                - name: Bump version and generate changelog (standard-version)
+                  run: |
+                      npx standard-version --no-verify
 
-            - name: Read version
-              run: |
-                  VERSION=$(jq -r '.version' < package.json)
-                  echo "VERSION=$VERSION" >> $GITHUB_ENV
-                  echo "Found version: $VERSION"
+                - name: Push version commit and tags
+                  run: |
+                      git push origin HEAD:master --follow-tags
 
-            - name: Create GitHub Release
-              uses: actions/create-release@v1
-              with:
-                  tag_name: v${{ env.VERSION }}
-                  release_name: v${{ env.VERSION }}
-                  body: |
-                      See CHANGELOG.md for details.
-                  draft: false
-                  prerelease: false
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  VERSION: ${{ env.VERSION }}
+                - name: Read version
+                  run: |
+                      VERSION=$(jq -r '.version' < package.json)
+                      echo "VERSION=$VERSION" >> $GITHUB_ENV
+                      echo "Found version: $VERSION"
+
+                - name: Create GitHub Release
+                  uses: actions/create-release@v1
+                  with:
+                      tag_name: v${{ env.VERSION }}
+                      release_name: v${{ env.VERSION }}
+                      body: |
+                          See CHANGELOG.md for details.
+                      draft: false
+                      prerelease: false
+                  env:
+                      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                      VERSION: ${{ env.VERSION }}
 
     publish:
         needs: release
