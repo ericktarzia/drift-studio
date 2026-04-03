@@ -2,7 +2,7 @@
   "name": "drift-studio",
   "displayName": "drift-studio",
   "description": "Drift database explorer for VSCode",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
