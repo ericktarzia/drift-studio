@@ -2,7 +2,7 @@
   "name": "drift-studio",
   "displayName": "drift-studio",
   "description": "Drift database explorer for VSCode",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/ericktarzia/drift-studio.git"
@@ -24,42 +24,34 @@
   "contributes": {
     "commands": [
       {
-        "command": "drift-studio.open",
-        "title": "Open Drift Studio"
-      },
-      {
-        "command": "drift-studio.selectDatabase",
-        "title": "Selecionar arquivo do banco Drift"
-      },
-      {
-        "command": "drift-studio.createTable",
-        "title": "Criar nova tabela Drift"
-      },
-      {
-        "command": "drift-studio.addColumn",
-        "title": "Adicionar coluna à tabela"
+        "command": "drift-studio.exportAll",
+        "title": "Drift Studio: Export DB Structure (JSON)"
       }
     ],
+    "viewContainers": {
+      "activitybar": [
+        {
+          "id": "driftStudio",
+          "title": "Drift Studio",
+          "icon": "images/icon.png"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "driftStudio": [
         {
           "id": "driftStudioExplorer",
-          "name": "Drift-Studio",
+          "name": "Drift Studio",
           "icon": "images/icon.png"
         }
       ]
     },
     "menus": {
-      "view/item/context": [
+      "view/title": [
         {
-          "command": "drift-studio.createTable",
-          "when": "view == driftStudioExplorer && viewItem == tablesRootNode",
-          "group": "navigation@1"
-        },
-        {
-          "command": "drift-studio.addColumn",
-          "when": "view == driftStudioExplorer && viewItem == driftTableNode",
-          "group": "inline@1"
+          "command": "drift-studio.exportAll",
+          "when": "view == driftStudioExplorer",
+          "group": "navigation"
         }
       ]
     }
