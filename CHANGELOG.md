@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/ericktarzia/drift-studio/compare/v0.2.0...v0.2.1) (2026-04-03)
+
+
+### Bug Fixes
+
+* add missing icon property in package.json ([6336665](https://github.com/ericktarzia/drift-studio/commit/6336665a79e8c9195c3ae7ea915dd3a389661e49))
+
 ## [0.2.0](https://github.com/ericktarzia/drift-studio/compare/v0.1.1...v0.2.0) (2026-04-03)
 
 
