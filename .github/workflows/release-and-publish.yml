@@ -12,62 +12,82 @@ jobs:
         concurrency:
             group: release-${{ github.ref }}
             cancel-in-progress: true
-            steps:
-                - name: Checkout
-                  uses: actions/checkout@v4
-                  with:
-                      fetch-depth: 0
-                      persist-credentials: true
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  persist-credentials: true
 
-                - name: Sync workspace to latest master
-                  run: |
-                      git fetch origin master --tags
-                      git checkout master
-                      git reset --hard origin/master
+            - name: Sync workspace to latest master
+              run: |
+                  git fetch origin master --tags
+                  git checkout master
+                  git reset --hard origin/master
 
-                - name: Setup Node.js
-                  uses: actions/setup-node@v4
-                  with:
-                      node-version: 20
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
 
-                - name: Configure Git identity
-                  run: |
-                      git config user.name "github-actions[bot]"
-                      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            - name: Configure Git identity
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-                - name: Install dependencies
-                  run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-                - name: Dry-run standard-version (preview)
-                  run: |
-                      npx standard-version --dry-run
+            - name: Dry-run standard-version (preview)
+              run: |
+                  LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+                  if [ -n "$LATEST_TAG" ] && git log "$LATEST_TAG"..HEAD --pretty=%s | grep -Ei "(^| )feat:|feature:" >/dev/null; then
+                    echo "Found feat/feature commits since $LATEST_TAG — previewing minor release"
+                    npx standard-version --dry-run --release-as minor
+                  elif [ -z "$LATEST_TAG" ] && git log --pretty=%s | grep -Ei "(^| )feat:|feature:" >/dev/null; then
+                    echo "No tags found but feat/feature commits present — previewing minor release"
+                    npx standard-version --dry-run --release-as minor
+                  else
+                    echo "No feat/feature commits found — previewing normal release"
+                    npx standard-version --dry-run
+                  fi
 
-                - name: Bump version and generate changelog (standard-version)
-                  run: |
-                      npx standard-version --no-verify
+            - name: Bump version and generate changelog (standard-version)
+              run: |
+                  LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+                  if [ -n "$LATEST_TAG" ] && git log "$LATEST_TAG"..HEAD --pretty=%s | grep -Ei "(^| )feat:|feature:" >/dev/null; then
+                    echo "Found feat/feature commits since $LATEST_TAG — performing minor release"
+                    npx standard-version --release-as minor --no-verify
+                  elif [ -z "$LATEST_TAG" ] && git log --pretty=%s | grep -Ei "(^| )feat:|feature:" >/dev/null; then
+                    echo "No tags found but feat/feature commits present — performing minor release"
+                    npx standard-version --release-as minor --no-verify
+                  else
+                    echo "No feat/feature commits found — performing normal release"
+                    npx standard-version --no-verify
+                  fi
 
-                - name: Push version commit and tags
-                  run: |
-                      git push origin HEAD:master --follow-tags
+            - name: Push version commit and tags
+              run: |
+                  git push origin HEAD:master --follow-tags
 
-                - name: Read version
-                  run: |
-                      VERSION=$(jq -r '.version' < package.json)
-                      echo "VERSION=$VERSION" >> $GITHUB_ENV
-                      echo "Found version: $VERSION"
+            - name: Read version
+              run: |
+                  VERSION=$(jq -r '.version' < package.json)
+                  echo "VERSION=$VERSION" >> $GITHUB_ENV
+                  echo "Found version: $VERSION"
 
-                - name: Create GitHub Release
-                  uses: actions/create-release@v1
-                  with:
-                      tag_name: v${{ env.VERSION }}
-                      release_name: v${{ env.VERSION }}
-                      body: |
-                          See CHANGELOG.md for details.
-                      draft: false
-                      prerelease: false
-                  env:
-                      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                      VERSION: ${{ env.VERSION }}
+            - name: Create GitHub Release
+              uses: actions/create-release@v1
+              with:
+                  tag_name: v${{ env.VERSION }}
+                  release_name: v${{ env.VERSION }}
+                  body: |
+                      See CHANGELOG.md for details.
+                  draft: false
+                  prerelease: false
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  VERSION: ${{ env.VERSION }}
 
     publish:
         needs: release

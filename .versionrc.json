@@ -1,3 +1,4 @@
 {
-  "releaseRules": [{ "type": "feature", "release": "minor" }]
+  "releaseRules": [{ "type": "feature", "release": "minor" }],
+  "bumpMinorPreMajor": true
 }
