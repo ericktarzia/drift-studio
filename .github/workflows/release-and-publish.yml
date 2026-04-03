@@ -16,6 +16,13 @@ jobs:
                   fetch-depth: 0
                   persist-credentials: true
 
+            - name: Sync workspace to latest master
+              run: |
+                  git fetch origin master --tags
+                  git checkout master
+                  git reset --hard origin/master
+                    persist-credentials: true
+
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
