@@ -67,7 +67,14 @@ jobs:
                   fi
 
             - name: Push version commit and tags
+              env:
+                  RELEASE_PAT: ${{ secrets.RELEASE_PAT }}
               run: |
+                  if [ -z "$RELEASE_PAT" ]; then
+                    echo "RELEASE_PAT secret is not set; aborting push step"
+                    exit 1
+                  fi
+                  git remote set-url origin https://x-access-token:${RELEASE_PAT}@github.com/${{ github.repository }}.git
                   git push origin HEAD:master --follow-tags
 
             - name: Read version
