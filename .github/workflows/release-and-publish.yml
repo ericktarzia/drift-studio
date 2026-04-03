@@ -8,6 +8,7 @@ on:
 jobs:
     release-please:
         runs-on: ubuntu-latest
+
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -33,6 +34,16 @@ jobs:
                   echo "VERSION=$VERSION" >> $GITHUB_ENV
                   echo "Found version: $VERSION"
 
+            - name: Generate CHANGELOG
+              run: |
+                  # generate or update CHANGELOG.md using conventional changelog (safe with npx)
+                  npx conventional-changelog -p angular -i CHANGELOG.md -s -r 0 || true
+                  git add CHANGELOG.md || true
+                  git commit -m "chore(release): update CHANGELOG.md [skip ci]" || echo "no changelog changes"
+                  git push origin HEAD:master || echo "push failed or nothing to push"
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
             - name: Create tag
               run: |
                   git config user.name "github-actions[bot]"
@@ -52,7 +63,6 @@ jobs:
                   prerelease: false
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  VERSION: ${{ env.VERSION }}
 
     publish:
         needs: release-please
