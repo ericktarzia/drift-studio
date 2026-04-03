@@ -2,7 +2,7 @@
   "name": "drift-studio",
   "displayName": "drift-studio",
   "description": "Drift database explorer for VSCode",
-  "version": "0.1.2",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/ericktarzia/drift-studio.git"
@@ -19,7 +19,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onView:driftStudioExplorer"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -28,7 +30,7 @@
         "title": "Drift Studio: Export DB Structure (JSON)"
       }
     ],
-    "viewContainers": {
+    "viewsContainers": {
       "activitybar": [
         {
           "id": "driftStudio",
@@ -41,8 +43,7 @@
       "driftStudio": [
         {
           "id": "driftStudioExplorer",
-          "name": "Drift Studio",
-          "icon": "images/icon.png"
+          "name": "Drift Studio"
         }
       ]
     },

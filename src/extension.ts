@@ -16,14 +16,27 @@ export function activate(context: vscode.ExtensionContext) {
       // Importação direta para TypeScript (não usar import dinâmico)
       const { findDriftTableColumns } = require("./utils");
       const columns = await findDriftTableColumns(tableName);
-      // Cria webview
-      const panel = vscode.window.createWebviewPanel(
-        "driftStudioTableWebview",
-        `Drift Table: ${tableName}`,
-        vscode.ViewColumn.Active,
-        { enableScripts: true },
-      );
-      panel.webview.html = getTableWebviewHtml(tableName, columns);
+      let panel: vscode.WebviewPanel | undefined;
+      try {
+        vscode.window.showInformationMessage(`Opening table ${tableName}...`);
+      } catch (e) {
+        // ignore
+      }
+      try {
+        panel = vscode.window.createWebviewPanel(
+          "driftStudioTableWebview",
+          `Drift Table: ${tableName}`,
+          vscode.ViewColumn.Active,
+          { enableScripts: true },
+        );
+        panel.webview.html = getTableWebviewHtml(tableName, columns);
+      } catch (err) {
+        console.error(err);
+        vscode.window.showErrorMessage(
+          `Failed to open table webview: ${String(err)}`,
+        );
+        return;
+      }
       // Handler para mensagens do webview (CRUD)
       panel.webview.onDidReceiveMessage(async (msg) => {
         if (msg.type === "openColumnClass") {
@@ -174,67 +187,58 @@ export function activate(context: vscode.ExtensionContext) {
       const tables = await findDriftTables();
       treeProvider.setTables(tables);
       treeProvider.clearColumnsCache();
-      vscode.window.showInformationMessage("Tabelas Drift atualizadas!");
+      vscode.window.showInformationMessage("Drift tables updated!");
     },
   );
   context.subscriptions.push(refreshCommand);
 
-  // Comando para criar nova tabela Drift
-  const createTableCommand = vscode.commands.registerCommand(
-    "drift-studio.createTable",
+  // Comando para exportar toda a estrutura do banco em JSON
+  const exportAllCommand = vscode.commands.registerCommand(
+    "drift-studio.exportAll",
     async () => {
-      const tableName = await vscode.window.showInputBox({
-        prompt: "Nome da nova tabela Drift",
-        placeHolder: "Ex: users",
-        validateInput: (value) =>
-          !/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(value)
-            ? "Nome inválido. Use apenas letras, números e _ (não pode começar com número)."
-            : undefined,
-      });
-      if (!tableName) {
-        return;
-      }
-      // Aqui você pode escolher o arquivo .dart para inserir a tabela
-      const dartFiles = await vscode.workspace.findFiles(
-        "**/*.dart",
-        "**/node_modules/**",
-      );
-      if (dartFiles.length === 0) {
-        vscode.window.showErrorMessage(
-          "Nenhum arquivo .dart encontrado no projeto.",
+      try {
+        await vscode.window.withProgress(
+          {
+            location: vscode.ProgressLocation.Notification,
+            title: "Exporting DB structure...",
+            cancellable: false,
+          },
+          async (progress) => {
+            progress.report({ message: "Collecting tables..." });
+            const tables = (await findDriftTables())
+              .slice()
+              .sort((a, b) => a.localeCompare(b));
+            const result: Record<string, { name: string; type: string }[]> = {};
+            for (const [i, t] of tables.entries()) {
+              progress.report({
+                message: `Collecting columns: ${t} (${i + 1}/${tables.length})`,
+              });
+              const cols = ((await findDriftTableColumns(t)) || [])
+                .slice()
+                .sort((a, b) => a.name.localeCompare(b.name));
+              result[t] = cols;
+            }
+            progress.report({ message: "Preparing JSON file..." });
+            const json = JSON.stringify(result, null, 2);
+            const uri = await vscode.window.showSaveDialog({
+              defaultUri: vscode.Uri.file(`drift-structure.json`),
+              filters: { JSON: ["json"] },
+            });
+            if (!uri) return;
+            await vscode.workspace.fs.writeFile(uri, Buffer.from(json, "utf8"));
+            vscode.window.showInformationMessage(
+              `Exported DB structure to ${uri.fsPath}`,
+            );
+          },
         );
-        return;
+      } catch (err) {
+        vscode.window.showErrorMessage(String(err));
       }
-      const picked = await vscode.window.showQuickPick(
-        dartFiles.map((uri) => ({
-          label: vscode.workspace.asRelativePath(uri),
-          uri,
-        })),
-        { placeHolder: "Selecione o arquivo .dart para criar a tabela" },
-      );
-      if (!picked) {
-        return;
-      }
-      const insertCode = `\nclass ${tableName} extends Table {\n  // TODO: Adicione colunas\n}\n`;
-      const fileBytes = await vscode.workspace.fs.readFile(picked.uri);
-      const content = Buffer.from(fileBytes).toString("utf8");
-      const edit = new vscode.WorkspaceEdit();
-      edit.insert(
-        picked.uri,
-        new vscode.Position(content.split("\n").length, 0),
-        insertCode,
-      );
-      await vscode.workspace.applyEdit(edit);
-      vscode.window.showInformationMessage(
-        `Tabela '${tableName}' criada em ${picked.label}`,
-      );
-      // Atualiza árvore
-      const tables = await findDriftTables();
-      treeProvider.setTables(tables);
-      treeProvider.clearColumnsCache();
     },
   );
-  context.subscriptions.push(createTableCommand);
+  context.subscriptions.push(exportAllCommand);
+
+  // removido: comandos para criar tabela/coluna e menus de contexto (clique direito)
 
   vscode.window.showInformationMessage("🚀 Drift Studio ativo");
 }

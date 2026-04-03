@@ -13,6 +13,10 @@ Erick Tarzia <ericktarzia@gmail.com>
 - Click a column name to open the table class in your code.
 - Modern, clean, and fast UI.
 
+## What's New
+
+- Export button: use the Export button in the view title to save the full DB structure as JSON. The export shows progress while preparing data and exports tables and columns alphabetically.
+
 > New features coming soon! Stay tuned for live data editing and more.
 
 ---
@@ -26,6 +30,12 @@ Erick Tarzia <ericktarzia@gmail.com>
 1. Open your Dart/Flutter project in VS Code.
 2. Click the Drift Studio icon in the Explorer.
 3. Browse your tables and columns. Click a column to jump to its class.
+
+---
+
+## Novidades
+
+- Botão de exportação: use o botão de exportação no título da view para salvar toda a estrutura do banco em JSON. A exportação mostra progresso enquanto prepara os dados e exporta tabelas e colunas em ordem alfabética.
 
 ---
 

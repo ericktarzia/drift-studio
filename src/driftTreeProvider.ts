@@ -36,8 +36,12 @@ export class DriftTreeProvider implements vscode.TreeDataProvider<any> {
       }
       return [
         {
-          label: "tables",
+          label: `tables${this._tables ? ` (${this._tables.length})` : ""}`,
           collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
+          command: {
+            command: "drift-studio.exportAll",
+            title: "Export DB Structure",
+          },
           children: this._tables
             .slice()
             .sort((a, b) => a.localeCompare(b))
@@ -47,7 +51,7 @@ export class DriftTreeProvider implements vscode.TreeDataProvider<any> {
               contextValue: "driftTableNode",
               command: {
                 command: "drift-studio.openTableWebview",
-                title: "Abrir tabela",
+                title: "Open table",
                 arguments: [{ tableName: table }],
               },
             })),
@@ -102,6 +106,12 @@ export class DriftTreeProvider implements vscode.TreeDataProvider<any> {
     );
     if (element.command) {
       item.command = element.command;
+    }
+    if (element.contextValue) {
+      item.contextValue = element.contextValue;
+      if (element.contextValue === "tablesRootNode") {
+        item.iconPath = new vscode.ThemeIcon("cloud-upload");
+      }
     }
     return item;
   }
