@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/ericktarzia/drift-studio/compare/v0.0.11...v0.1.0) (2026-04-03)
+
+
+### Features
+
+* enhance release workflow and update contributing guidelines ([40ec463](https://github.com/ericktarzia/drift-studio/commit/40ec463940cc1c3bc1c494a20a3ad7390015f479))
+* test feature to trigger minor bump ([27e82af](https://github.com/ericktarzia/drift-studio/commit/27e82af086e6c45265aa1f07971b656a15424762))
+
 ### [0.0.11](https://github.com/ericktarzia/drift-studio/compare/v0.0.10...v0.0.11) (2026-04-03)
 
 ### [0.0.10](https://github.com/ericktarzia/drift-studio/compare/v0.0.9...v0.0.10) (2026-04-03)
