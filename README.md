@@ -31,6 +31,29 @@ Erick Tarzia <ericktarzia@gmail.com>
 2. Click the Drift Studio icon in the Explorer.
 3. Browse your tables and columns. Click a column to jump to its class.
 
+## View saved device data / Ver dados salvos no dispositivo
+
+English
+
+If you want to inspect the actual SQLite file created by your app (for
+example on a device or emulator), we recommend using the companion
+package `drift_devtools`. It provides a small helper and an example that
+creates and seeds a `.sqlite` file and can send the file path to the
+Drift Studio extension so you can view rows and contents directly.
+
+Repository: https://github.com/ericktarzia/drift_devtools
+
+Português
+
+Se você quiser inspecionar o arquivo SQLite gerado pela sua aplicação
+(por exemplo, em um dispositivo ou emulador), recomendamos o pacote
+complementar `drift_devtools`. Ele fornece um helper e um exemplo que
+cria e popula um arquivo `.sqlite` e pode enviar o caminho do arquivo
+para a extensão Drift Studio para que você visualize linhas e conteúdos
+diretamente.
+
+Repositório: https://github.com/ericktarzia/drift_devtools
+
 ---
 
 ## Novidades

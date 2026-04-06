@@ -21,6 +21,9 @@ export class DriftTreeProvider implements vscode.TreeDataProvider<any> {
     this._loadingTables = false;
     this.refresh();
   }
+  getTables(): string[] {
+    return this._tables.slice();
+  }
   refresh(): void {
     this._onDidChangeTreeData.fire(undefined);
   }
