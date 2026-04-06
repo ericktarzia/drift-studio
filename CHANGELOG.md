@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/ericktarzia/drift-studio/compare/v0.3.0...v0.4.0) (2026-04-06)
+
+
+### Features
+
+* enhance Drift extension with device support and improved table handling ([a8269e7](https://github.com/ericktarzia/drift-studio/commit/a8269e7e5446162b6e030be2b803a07ddbddb24b))
+
 ## [0.3.0](https://github.com/ericktarzia/drift-studio/compare/v0.2.1...v0.3.0) (2026-04-03)
 
 
