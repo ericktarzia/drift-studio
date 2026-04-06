@@ -21,6 +21,7 @@
     "Other"
   ],
   "activationEvents": [
+    "onStartupFinished",
     "onView:driftStudioExplorer"
   ],
   "main": "./dist/extension.js",
@@ -29,6 +30,14 @@
       {
         "command": "drift-studio.exportAll",
         "title": "Drift Studio: Export DB Structure (JSON)"
+      },
+      {
+        "command": "drift-studio.openDbViewer",
+        "title": "Drift Studio: Open DB Viewer"
+      },
+      {
+        "command": "drift-studio.openDbViewerForTable",
+        "title": "Drift Studio: Open DB Viewer (table)"
       }
     ],
     "viewsContainers": {
@@ -54,6 +63,18 @@
           "command": "drift-studio.exportAll",
           "when": "view == driftStudioExplorer",
           "group": "navigation"
+        },
+        {
+          "command": "drift-studio.openDbViewer",
+          "when": "view == driftStudioExplorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "drift-studio.openDbViewerForTable",
+          "when": "view == driftStudioExplorer && viewItem == driftTableNode",
+          "group": "inline"
         }
       ]
     }
@@ -74,16 +95,21 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.110.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "typescript-eslint": "^8.56.1",
-    "eslint": "^9.39.3",
-    "esbuild": "^0.27.3",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.9.3",
+    "@types/vscode": "^1.110.0",
+    "@types/ws": "^8.18.1",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
-    "standard-version": "^9.5.0"
+    "esbuild": "^0.27.3",
+    "eslint": "^9.39.3",
+    "npm-run-all": "^4.1.5",
+    "standard-version": "^9.5.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.7",
+    "ws": "^8.13.0"
   }
 }
