@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/ericktarzia/drift-studio/compare/v0.2.1...v0.3.0) (2026-04-03)
+
+
+### Features
+
+* add validation for RELEASE_PAT in release workflow ([a2baf26](https://github.com/ericktarzia/drift-studio/commit/a2baf2641ce20fc54709f351a46d056d834f95da))
+
 ### [0.2.1](https://github.com/ericktarzia/drift-studio/compare/v0.2.0...v0.2.1) (2026-04-03)
 
 
